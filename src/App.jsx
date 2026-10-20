@@ -1,5 +1,10 @@
+import { UpdateUserForm } from "./FormUser";
 function App() {
-  return <></>;
+  return (
+    <>
+      <UpdateUserForm />
+    </>
+  );
 }
 
 export default App;
