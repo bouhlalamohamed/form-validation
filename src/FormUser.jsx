@@ -18,7 +18,12 @@ import {
 } from "@mui/material";
 
 export const UpdateUserForm = () => {
-  const { register, handleSubmit, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     defaultValues: {
       fullName: "John Doe",
@@ -75,6 +80,17 @@ export const UpdateUserForm = () => {
               min: { value: 18, message: "Age must be greater than 18" },
             })}
           />
+          {errors.age && (
+            <Typography
+              variant="overline"
+              gutterBottom
+              sx={{
+                color: "red",
+              }}
+            >
+              {errors.age?.message}
+            </Typography>
+          )}
           <TextField
             label="Password **"
             {...register("password")}
