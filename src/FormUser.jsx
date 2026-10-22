@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Container,
@@ -10,11 +11,13 @@ import {
   MenuItem,
   Grid,
   CircularProgress,
+  InputLabel,
+  Select,
+  FormControl,
 } from "@mui/material";
 
 export const UpdateUserForm = () => {
-  const [formData, setFormData] = useState({});
-
+  const { register, handleSubmit } = useForm({});
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -25,13 +28,15 @@ export const UpdateUserForm = () => {
     { value: "jo", label: "Jordan" },
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const submitForm = (data) => {
+    // e.preventDefault();
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       setSuccessMessage("Succsess : form submitted!");
     }, 1500);
+
+    return console.log(data);
   };
 
   return (
@@ -43,57 +48,61 @@ export const UpdateUserForm = () => {
       <Paper elevation={5} sx={{ p: 4 }}>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(submitForm)}
           sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
         >
           <TextField
             label="Full Name"
-            name="fullName"
+            {...register("fullName")}
             fullWidth
             variant="outlined"
             required
           />
           <TextField
             label="Age"
-            name="age"
             type="number"
             fullWidth
             variant="outlined"
             required
+            {...register("age")}
           />
           <TextField
-            label="Password"
-            name="password"
+            label="Password **"
+            {...register("password")}
             type="password"
             fullWidth
             variant="outlined"
             required
           />
           <TextField
-            label="Email"
-            name="email"
+            label="Email *"
+            {...register("email")}
             type="email"
             fullWidth
             variant="outlined"
             required
           />
-          <TextField
-            select
-            label="Country"
-            name="country"
-            fullWidth
-            variant="outlined"
-            required
-          >
-            <MenuItem value="">
-              <em>Select your country</em>
-            </MenuItem>
-            {countries.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+
+          <FormControl>
+            <InputLabel id="demo-simple-select-outlined-label">
+              Country
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              label="Country"
+              fullWidth
+              variant="outlined"
+              defaultValue={""}
+              {...register("country")}
+            >
+              {countries.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <Button
             type="submit"
