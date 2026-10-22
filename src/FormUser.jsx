@@ -17,7 +17,11 @@ import {
 } from "@mui/material";
 
 export const UpdateUserForm = () => {
-  const { register, handleSubmit } = useForm({});
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      fullName: "John Doe",
+    },
+  });
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
