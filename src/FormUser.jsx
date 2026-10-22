@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 import {
   Box,
   Container,
@@ -17,7 +18,8 @@ import {
 } from "@mui/material";
 
 export const UpdateUserForm = () => {
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, control } = useForm({
+    mode: "onBlur",
     defaultValues: {
       fullName: "John Doe",
     },
@@ -57,7 +59,7 @@ export const UpdateUserForm = () => {
         >
           <TextField
             label="Full Name"
-            {...register("fullName")}
+            {...register("fullName", { required: "Full Name is required" })}
             fullWidth
             variant="outlined"
             required
@@ -68,7 +70,10 @@ export const UpdateUserForm = () => {
             fullWidth
             variant="outlined"
             required
-            {...register("age")}
+            {...register("age", {
+              required: "Age is required",
+              min: { value: 18, message: "Age must be greater than 18" },
+            })}
           />
           <TextField
             label="Password **"
@@ -136,6 +141,8 @@ export const UpdateUserForm = () => {
           </Button>
         </Box>
       </Paper>
+
+      <DevTool control={control} />
     </Container>
   );
 };
