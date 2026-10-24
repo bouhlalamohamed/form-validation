@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Container,
@@ -16,15 +17,42 @@ import {
   Select,
   FormControl,
 } from "@mui/material";
+import * as yup from "yup";
+const schema = yup.object().shape({
+  fullName: yup
+    .string()
+    .required("Full Name is required")
+    .max(20, "Full Name must be less than 20 characters")
+    .matches(/^([^0-9]*)$/, "Full Name must not contain numbers"),
+  age: yup
+    .number()
+    .typeError("Age must be a number")
+    .required("Age is required")
+    .min(18, "Age must be greater than or equal to 18"),
+  password: yup.string().required("Password is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  country: yup.string().required("Country is required"),
+});
 
 export const UpdateUserForm = () => {
   const {
+    setValue,
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {
+      errors,
+      isDirty,
+      isValid,
+      isSubmitting,
+      issubmitted,
+      isSubmitSuccessful,
+      isValidating,
+      dirtyFields,
+    },
   } = useForm({
     mode: "onBlur",
+    resolver: yupResolver(schema),
     defaultValues: {
       fullName: "John Doe",
     },
@@ -64,20 +92,37 @@ export const UpdateUserForm = () => {
         >
           <TextField
             label="Full Name"
-            {...register("fullName", { required: "Full Name is required" })}
+            {...register("fullName", {
+              // required: "Full Name is required",
+              // validate: (value, formvalues) => {
+              //   return (
+              //     value.trim().length > 20 ||
+              //     "full name must be least than 20 characteres"
+              //   );
+              // },
+            })}
             fullWidth
             variant="outlined"
-            required
           />
+          {errors.fullName && (
+            <Typography
+              variant="overline"
+              gutterBottom
+              sx={{
+                color: "red",
+              }}
+            >
+              {errors.fullName?.message}
+            </Typography>
+          )}
           <TextField
             label="Age"
             type="number"
             fullWidth
             variant="outlined"
-            required
             {...register("age", {
-              required: "Age is required",
-              min: { value: 18, message: "Age must be greater than 18" },
+              // required: "Age is required",
+              // min: { value: 18, message: "Age must be greater than 18" },
             })}
           />
           {errors.age && (
@@ -97,15 +142,24 @@ export const UpdateUserForm = () => {
             type="password"
             fullWidth
             variant="outlined"
-            required
           />
+          {errors.password && (
+            <Typography
+              variant="overline"
+              gutterBottom
+              sx={{
+                color: "red",
+              }}
+            >
+              {errors.password?.message}
+            </Typography>
+          )}
           <TextField
             label="Email *"
             {...register("email")}
             type="email"
             fullWidth
             variant="outlined"
-            required
           />
 
           <FormControl>
@@ -156,6 +210,14 @@ export const UpdateUserForm = () => {
             )}
           </Button>
         </Box>
+        <Button
+          onClick={() => {
+            setValue("fullName", "mohamed");
+          }}
+        >
+          {" "}
+          teste
+        </Button>
       </Paper>
 
       <DevTool control={control} />
