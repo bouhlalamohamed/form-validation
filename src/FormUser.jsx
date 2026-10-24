@@ -50,6 +50,7 @@ export const UpdateUserForm = () => {
       isValidating,
       dirtyFields,
     },
+    reset,
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -74,6 +75,8 @@ export const UpdateUserForm = () => {
       setLoading(false);
       setSuccessMessage("Succsess : form submitted!");
     }, 1500);
+
+    reset();
 
     return console.log(data);
   };
@@ -210,14 +213,6 @@ export const UpdateUserForm = () => {
             )}
           </Button>
         </Box>
-        <Button
-          onClick={() => {
-            setValue("fullName", "mohamed");
-          }}
-        >
-          {" "}
-          teste
-        </Button>
       </Paper>
 
       <DevTool control={control} />
