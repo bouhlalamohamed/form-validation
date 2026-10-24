@@ -215,7 +215,7 @@ export const UpdateUserForm = () => {
         </Box>
       </Paper>
 
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </Container>
   );
 };
